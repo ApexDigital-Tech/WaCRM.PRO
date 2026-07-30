@@ -6,6 +6,9 @@ import { createClient } from '@/utils/supabase/server'
 
 export async function login(formData: FormData) {
   try {
+    console.log('[DEBUG LOGIN] NEXT_PUBLIC_SUPABASE_URL:', process.env.NEXT_PUBLIC_SUPABASE_URL);
+    console.log('[DEBUG LOGIN] KEY EXISTS:', !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
+    
     const supabase = createClient()
 
     const data = {
@@ -30,6 +33,9 @@ export async function login(formData: FormData) {
 
 export async function signup(formData: FormData) {
   try {
+    console.log('[DEBUG SIGNUP] NEXT_PUBLIC_SUPABASE_URL:', process.env.NEXT_PUBLIC_SUPABASE_URL);
+    console.log('[DEBUG SIGNUP] KEY EXISTS:', !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
+    
     const supabase = createClient()
 
     const data = {

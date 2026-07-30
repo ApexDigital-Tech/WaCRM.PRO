@@ -9,13 +9,8 @@ export async function updateSession(request: NextRequest) {
   })
 
   try {
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-    if (!supabaseUrl || !supabaseAnonKey) {
-      console.error('Middleware: Variables de entorno de Supabase faltantes en Edge Runtime.');
-      return NextResponse.next(); // Bypass si no hay variables (evita Error 500 en build/edge)
-    }
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://wqtgifqigtbajohgndlg.supabase.co';
+    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'tu_anon_key_aqui';
 
     const supabase = createServerClient(
       supabaseUrl,
