@@ -5,17 +5,22 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/utils/supabase/server'
 
 export async function login(formData: FormData) {
-  const supabase = createClient()
+  try {
+    const supabase = createClient()
 
-  const data = {
-    email: formData.get('email') as string,
-    password: formData.get('password') as string,
-  }
+    const data = {
+      email: formData.get('email') as string,
+      password: formData.get('password') as string,
+    }
 
-  const { error } = await supabase.auth.signInWithPassword(data)
+    const { error } = await supabase.auth.signInWithPassword(data)
 
-  if (error) {
-    return { error: error.message }
+    if (error) {
+      return { error: error.message }
+    }
+  } catch (error: any) {
+    console.error("Action error:", error);
+    return { error: error?.message || 'Error del servidor al iniciar sesión' }
   }
 
   revalidatePath('/', 'layout')
@@ -23,22 +28,27 @@ export async function login(formData: FormData) {
 }
 
 export async function signup(formData: FormData) {
-  const supabase = createClient()
+  try {
+    const supabase = createClient()
 
-  const data = {
-    email: formData.get('email') as string,
-    password: formData.get('password') as string,
-    options: {
-      data: {
-        full_name: formData.get('full_name') as string,
+    const data = {
+      email: formData.get('email') as string,
+      password: formData.get('password') as string,
+      options: {
+        data: {
+          full_name: formData.get('full_name') as string,
+        }
       }
     }
-  }
 
-  const { error } = await supabase.auth.signUp(data)
+    const { error } = await supabase.auth.signUp(data)
 
-  if (error) {
-    return { error: error.message }
+    if (error) {
+      return { error: error.message }
+    }
+  } catch (error: any) {
+    console.error("Action error:", error);
+    return { error: error?.message || 'Error del servidor al registrar usuario' }
   }
 
   revalidatePath('/', 'layout')
