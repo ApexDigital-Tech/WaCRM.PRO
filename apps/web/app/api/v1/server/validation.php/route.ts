@@ -1,11 +1,14 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
-// Inicializar cliente admin de Supabase para validaciones internas
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://mock.supabase.co',
-  process.env.SUPABASE_SERVICE_ROLE_KEY || 'mock'
-);
+// Helper para validar URL
+function getValidUrl(url?: string): string {
+  if (!url) return 'https://mock.supabase.co';
+  if (!url.startsWith('http://') && !url.startsWith('https://')) {
+    return `https://${url}`;
+  }
+  return url;
+}
 
 export async function POST(request: Request) {
   try {
@@ -13,6 +16,11 @@ export async function POST(request: Request) {
     const email = (input.email || '').trim();
     const accessTokenPlugin = input.access_token_plugin || input.token || '';
     const chromeStoreID = input.chromeStoreID || '';
+
+    const supabaseAdmin = createClient(
+      getValidUrl(process.env.NEXT_PUBLIC_SUPABASE_URL),
+      process.env.SUPABASE_SERVICE_ROLE_KEY || 'mock'
+    );
 
     if (!email) {
       return NextResponse.json({
