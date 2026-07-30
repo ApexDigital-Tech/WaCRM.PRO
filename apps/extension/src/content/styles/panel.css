@@ -1,0 +1,456 @@
+/* ============================================================
+   WA-CRM — Panel Styles (Shadow Root isolation)
+   TODO CSS vive exclusivamente dentro del Shadow DOM.
+   NINGUNA regla puede escapar al DOM de WhatsApp.
+   ============================================================ */
+
+/* ────────────────────────────────────────────────────────────
+   DESIGN TOKENS — CSS Custom Properties (scoped to :host)
+   ──────────────────────────────────────────────────────────── */
+
+:host {
+  /* Posición y apilamiento */
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 360px;
+  height: 100vh;
+  z-index: 2147483646; /* max-int - 1, bajo el banner de conexión */
+  pointer-events: none; /* El host no intercepta clicks */
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  /* Paleta */
+  --color-bg-primary:    #0f1117;
+  --color-bg-secondary:  #1a1d27;
+  --color-bg-card:       #21253a;
+  --color-border:        rgba(255, 255, 255, 0.08);
+  --color-accent:        #6c63ff;
+  --color-accent-hover:  #5a52e0;
+  --color-success:       #22c55e;
+  --color-warning:       #f59e0b;
+  --color-danger:        #ef4444;
+  --color-text-primary:  #f1f5f9;
+  --color-text-secondary: #94a3b8;
+  --color-text-muted:    #64748b;
+
+  /* Espaciado */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+
+  /* Bordes y sombras */
+  --radius-sm:  6px;
+  --radius-md:  10px;
+  --radius-lg:  16px;
+  --shadow-panel: -4px 0 32px rgba(0, 0, 0, 0.6);
+  --shadow-card:  0 2px 12px rgba(0, 0, 0, 0.3);
+
+  /* Transiciones */
+  --transition-fast:   150ms ease;
+  --transition-normal: 250ms ease;
+  --transition-slow:   400ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ────────────────────────────────────────────────────────────
+   PANEL PRINCIPAL
+   ──────────────────────────────────────────────────────────── */
+
+#wacrm-app {
+  pointer-events: all;
+  width: 100%;
+  height: 100%;
+  background: var(--color-bg-primary);
+  border-left: 1px solid var(--color-border);
+  box-shadow: var(--shadow-panel);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  /* Animación de entrada desde la derecha */
+  animation: slideInRight var(--transition-slow) forwards;
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(100%); opacity: 0; }
+  to   { transform: translateX(0);    opacity: 1; }
+}
+
+/* ────────────────────────────────────────────────────────────
+   HEADER
+   ──────────────────────────────────────────────────────────── */
+
+.wacrm-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-md) var(--spacing-lg);
+  background: var(--color-bg-secondary);
+  border-bottom: 1px solid var(--color-border);
+  flex-shrink: 0;
+}
+
+.wacrm-header__logo {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.wacrm-header__logo-icon {
+  width: 28px;
+  height: 28px;
+  background: var(--color-accent);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.5px;
+}
+
+.wacrm-header__title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  letter-spacing: -0.3px;
+}
+
+.wacrm-header__subtitle {
+  font-size: 11px;
+  color: var(--color-text-muted);
+  margin-top: 1px;
+}
+
+/* ────────────────────────────────────────────────────────────
+   CONNECTION BANNER (A/B híbrido — visible en intento 4+)
+   z-index: max para aparecer sobre el panel
+   ──────────────────────────────────────────────────────────── */
+
+.wacrm-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: 12px;
+  font-weight: 500;
+  flex-shrink: 0;
+  transition: background var(--transition-normal);
+  animation: bannerFadeIn var(--transition-normal) forwards;
+}
+
+@keyframes bannerFadeIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.wacrm-banner--reconnecting {
+  background: rgba(245, 158, 11, 0.15);
+  border-bottom: 1px solid rgba(245, 158, 11, 0.3);
+  color: var(--color-warning);
+}
+
+.wacrm-banner--failed {
+  background: rgba(239, 68, 68, 0.15);
+  border-bottom: 1px solid rgba(239, 68, 68, 0.3);
+  color: var(--color-danger);
+}
+
+.wacrm-banner--connected {
+  background: rgba(34, 197, 94, 0.1);
+  border-bottom: 1px solid rgba(34, 197, 94, 0.2);
+  color: var(--color-success);
+}
+
+.wacrm-banner__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-right: var(--spacing-sm);
+}
+
+.wacrm-banner--reconnecting .wacrm-banner__dot {
+  background: var(--color-warning);
+  animation: pulse 1.2s ease-in-out infinite;
+}
+
+.wacrm-banner--failed .wacrm-banner__dot {
+  background: var(--color-danger);
+}
+
+.wacrm-banner--connected .wacrm-banner__dot {
+  background: var(--color-success);
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.4; transform: scale(0.8); }
+}
+
+.wacrm-banner__left {
+  display: flex;
+  align-items: center;
+}
+
+.wacrm-banner__retry-btn {
+  background: none;
+  border: 1px solid currentColor;
+  color: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  opacity: 0.8;
+  transition: opacity var(--transition-fast);
+}
+
+.wacrm-banner__retry-btn:hover {
+  opacity: 1;
+}
+
+/* ────────────────────────────────────────────────────────────
+   SCROLLABLE CONTENT AREA
+   ──────────────────────────────────────────────────────────── */
+
+.wacrm-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--spacing-md);
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) transparent;
+}
+
+.wacrm-content::-webkit-scrollbar {
+  width: 4px;
+}
+
+.wacrm-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.wacrm-content::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 2px;
+}
+
+/* ────────────────────────────────────────────────────────────
+   LOGIN VIEW
+   ──────────────────────────────────────────────────────────── */
+
+.wacrm-login {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: var(--spacing-xl);
+  text-align: center;
+  gap: var(--spacing-lg);
+}
+
+.wacrm-login__logo {
+  width: 64px;
+  height: 64px;
+  background: linear-gradient(135deg, var(--color-accent), #9333ea);
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 800;
+  color: #fff;
+  box-shadow: 0 8px 32px rgba(108, 99, 255, 0.4);
+}
+
+.wacrm-login__title {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  letter-spacing: -0.5px;
+}
+
+.wacrm-login__subtitle {
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  max-width: 260px;
+}
+
+.wacrm-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  width: 100%;
+}
+
+.wacrm-form__group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.wacrm-form__label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.wacrm-form__input {
+  width: 100%;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text-primary);
+  font-size: 14px;
+  outline: none;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  box-sizing: border-box;
+}
+
+.wacrm-form__input:focus {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.2);
+}
+
+.wacrm-form__input::placeholder {
+  color: var(--color-text-muted);
+}
+
+.wacrm-btn {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform var(--transition-fast), opacity var(--transition-fast),
+              box-shadow var(--transition-fast);
+}
+
+.wacrm-btn:active {
+  transform: scale(0.98);
+}
+
+.wacrm-btn--primary {
+  background: linear-gradient(135deg, var(--color-accent), #9333ea);
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(108, 99, 255, 0.35);
+}
+
+.wacrm-btn--primary:hover:not(:disabled) {
+  box-shadow: 0 6px 24px rgba(108, 99, 255, 0.5);
+  transform: translateY(-1px);
+}
+
+.wacrm-btn--primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.wacrm-form__error {
+  font-size: 12px;
+  color: var(--color-danger);
+  text-align: left;
+}
+
+.wacrm-form__success {
+  font-size: 12px;
+  color: var(--color-success);
+  text-align: left;
+  background: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.2);
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+}
+
+.wacrm-form__forgot-link {
+  background: none;
+  border: none;
+  color: var(--color-accent);
+  font-size: 12px;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+  opacity: 0.85;
+  transition: opacity var(--transition-fast);
+}
+
+.wacrm-form__forgot-link:hover:not(:disabled) {
+  opacity: 1;
+}
+
+.wacrm-form__forgot-link:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ────────────────────────────────────────────────────────────
+   CRM PANEL VIEW — Scaffold
+   ──────────────────────────────────────────────────────────── */
+
+.wacrm-section {
+  margin-bottom: var(--spacing-lg);
+}
+
+.wacrm-section__title {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: var(--spacing-sm);
+}
+
+.wacrm-card {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  box-shadow: var(--shadow-card);
+  transition: border-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.wacrm-card:hover {
+  border-color: rgba(255, 255, 255, 0.15);
+  transform: translateY(-1px);
+}
+
+.wacrm-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-xl);
+  gap: var(--spacing-sm);
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: 13px;
+}
+
+.wacrm-placeholder__icon {
+  font-size: 32px;
+  opacity: 0.4;
+}
+
+/* ────────────────────────────────────────────────────────────
+   LOADING SPINNER
+   ──────────────────────────────────────────────────────────── */
+
+.wacrm-spinner {
+  width: 24px;
+  height: 24px;
+  border: 3px solid var(--color-border);
+  border-top-color: var(--color-accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

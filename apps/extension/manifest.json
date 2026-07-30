@@ -1,0 +1,46 @@
+{
+  "manifest_version": 3,
+  "name": "WA-CRM: Workspace Platform",
+  "version": "8.0.0",
+  "description": "CRM colaborativo para WhatsApp Web. Gestiona contactos, pipeline y follow-ups sin salir de WhatsApp.",
+
+  "permissions": [
+    "storage",
+    "alarms",
+    "tabs",
+    "windows"
+  ],
+
+  "host_permissions": [
+    "https://web.whatsapp.com/*",
+    "https://__SUPABASE_REF__.supabase.co/*",
+    "wss://__SUPABASE_REF__.supabase.co/*"
+  ],
+
+  "background": {
+    "service_worker": "background/serviceWorker.js",
+    "type": "module"
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["https://web.whatsapp.com/*"],
+      "js": ["content/mainWorldBridge.js"],
+      "run_at": "document_start",
+      "world": "MAIN"
+    },
+    {
+      "matches": ["https://web.whatsapp.com/*"],
+      "js": ["content/index.js"],
+      "run_at": "document_idle"
+    }
+  ],
+
+  "action": {
+    "default_title": "Abrir WA-CRM en WhatsApp Web"
+  },
+
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; connect-src https://__SUPABASE_REF__.supabase.co wss://__SUPABASE_REF__.supabase.co;"
+  }
+}

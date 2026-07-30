@@ -1,0 +1,21 @@
+:root {
+    --primaria: #4ab270;
+    --secundaria: #1e8f60;
+    --terciaria: #bbeba4;
+    --letra: #ffffff;
+}
+
+.dark {
+    --primaria: #4ab270;
+    --secundaria: #1e8f60;
+    --terciaria: #bbeba4;
+    --letra: #ffffff;
+}
+
+.icons_primary_stroke {
+    stroke: var(--primaria);
+}
+
+.icons_primary_color {
+    color: var(--primaria);
+}

@@ -1,0 +1,1 @@
+const a=(n,t)=>{const p=t?`&text=${encodeURIComponent(t)}`:"",c=`https://api.whatsapp.com/send?phone=${n}${p}`;let e=document.createElement("a");e.setAttribute("href",c);let o=document.body.appendChild(e);o.click(),o.remove()};export{a as o};
