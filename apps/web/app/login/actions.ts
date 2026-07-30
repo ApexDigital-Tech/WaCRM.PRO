@@ -20,7 +20,8 @@ export async function login(formData: FormData) {
     }
   } catch (error: any) {
     console.error("Action error:", error);
-    return { error: error?.message || 'Error del servidor al iniciar sesión' }
+    const details = JSON.stringify(error, Object.getOwnPropertyNames(error));
+    return { error: `Server Error: ${error?.message}. Detalle profundo: ${details}` }
   }
 
   revalidatePath('/', 'layout')
@@ -48,7 +49,8 @@ export async function signup(formData: FormData) {
     }
   } catch (error: any) {
     console.error("Action error:", error);
-    return { error: error?.message || 'Error del servidor al registrar usuario' }
+    const details = JSON.stringify(error, Object.getOwnPropertyNames(error));
+    return { error: `Server Error: ${error?.message}. Detalle profundo: ${details}` }
   }
 
   revalidatePath('/', 'layout')
