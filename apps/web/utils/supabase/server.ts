@@ -5,8 +5,8 @@ export function createClient() {
   const cookieStore = cookies()
 
   return createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://wqtqifqigtbajohgndlg.supabase.co',
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'tu_anon_key_aqui',
+    (process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://wqtqifqigtbajohgndlg.supabase.co').trim(),
+    (process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'tu_anon_key_aqui').trim(),
     {
       cookies: {
         get(name: string) {

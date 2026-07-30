@@ -9,8 +9,8 @@ export async function updateSession(request: NextRequest) {
   })
 
   try {
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://wqtqifqigtbajohgndlg.supabase.co';
-    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'tu_anon_key_aqui';
+    const supabaseUrl = (process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://wqtqifqigtbajohgndlg.supabase.co').trim();
+    const supabaseAnonKey = (process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'tu_anon_key_aqui').trim();
 
     const supabase = createServerClient(
       supabaseUrl,
