@@ -59,45 +59,50 @@ export default function ResetPasswordPage() {
   }
 
   return (
-    <div style={styles.container}>
-      <div style={styles.card}>
-        <div style={styles.logo}>W</div>
-        <h1 style={styles.title}>WA-CRM</h1>
-        <p style={styles.subtitle}>Establecer / Restablecer Contraseña</p>
+    <div className="auth-layout">
+      <div className="glass-panel auth-card animate-fade-in">
+        <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+          <h1 style={{ marginBottom: '0.5rem', fontSize: '1.75rem' }}>WA-CRM</h1>
+          <p>Establecer / Restablecer Contraseña</p>
+        </div>
 
         {message ? (
-          <div style={styles.successBox}>
+          <div style={{ padding: '0.75rem', background: 'rgba(16, 185, 129, 0.1)', border: '1px solid var(--success)', borderRadius: 'var(--border-radius-sm)', color: 'var(--success)', marginBottom: '1.5rem', fontSize: '0.9rem' }}>
             <p style={{ margin: 0, fontWeight: 600 }}>{message}</p>
           </div>
         ) : (
-          <form onSubmit={handleUpdatePassword} style={styles.form}>
-            <div style={styles.group}>
-              <label style={styles.label}>Nueva Contraseña</label>
+          <form onSubmit={handleUpdatePassword} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+            <div>
+              <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Nueva Contraseña</label>
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
                 required
-                style={styles.input}
+                className="input-field"
               />
             </div>
 
-            <div style={styles.group}>
-              <label style={styles.label}>Confirmar Contraseña</label>
+            <div>
+              <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Confirmar Contraseña</label>
               <input
                 type="password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 placeholder="••••••••"
                 required
-                style={styles.input}
+                className="input-field"
               />
             </div>
 
-            {error && <p style={styles.errorText}>{error}</p>}
+            {error && (
+              <div style={{ padding: '0.75rem', background: 'rgba(239, 68, 68, 0.1)', border: '1px solid var(--danger)', borderRadius: 'var(--border-radius-sm)', color: 'var(--danger)', fontSize: '0.9rem' }}>
+                {error}
+              </div>
+            )}
 
-            <button type="submit" disabled={loading} style={styles.button}>
+            <button type="submit" disabled={loading} className="btn btn-primary" style={{ marginTop: '0.5rem' }}>
               {loading ? 'Guardando...' : 'Actualizar Contraseña'}
             </button>
           </form>
@@ -107,98 +112,4 @@ export default function ResetPasswordPage() {
   );
 }
 
-const styles: Record<string, React.CSSProperties> = {
-  container: {
-    minHeight: '100vh',
-    backgroundColor: '#0f1117',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    fontFamily: 'Inter, system-ui, -apple-system, sans-serif',
-    padding: '24px',
-    color: '#f1f5f9',
-  },
-  card: {
-    backgroundColor: '#1a1d27',
-    border: '1px solid rgba(255, 255, 255, 0.08)',
-    borderRadius: '16px',
-    padding: '32px',
-    width: '100%',
-    maxWidth: '400px',
-    textAlign: 'center',
-    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)',
-  },
-  logo: {
-    width: '56px',
-    height: '56px',
-    background: 'linear-gradient(135deg, #6c63ff, #9333ea)',
-    borderRadius: '12px',
-    display: 'inline-flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    fontSize: '24px',
-    fontWeight: 'bold',
-    color: '#fff',
-    marginBottom: '16px',
-  },
-  title: {
-    fontSize: '22px',
-    fontWeight: '700',
-    margin: '0 0 4px 0',
-  },
-  subtitle: {
-    fontSize: '14px',
-    color: '#94a3b8',
-    marginBottom: '24px',
-  },
-  form: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '16px',
-    textAlign: 'left',
-  },
-  group: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '6px',
-  },
-  label: {
-    fontSize: '12px',
-    fontWeight: 600,
-    color: '#94a3b8',
-    textTransform: 'uppercase',
-  },
-  input: {
-    padding: '10px 14px',
-    backgroundColor: '#21253a',
-    border: '1px solid rgba(255, 255, 255, 0.1)',
-    borderRadius: '8px',
-    color: '#fff',
-    fontSize: '14px',
-    outline: 'none',
-  },
-  button: {
-    padding: '12px',
-    backgroundColor: '#6c63ff',
-    color: '#fff',
-    border: 'none',
-    borderRadius: '8px',
-    fontWeight: '600',
-    fontSize: '14px',
-    cursor: 'pointer',
-    marginTop: '8px',
-  },
-  errorText: {
-    fontSize: '12px',
-    color: '#ef4444',
-    margin: 0,
-  },
-  successBox: {
-    backgroundColor: 'rgba(34, 197, 94, 0.15)',
-    border: '1px solid rgba(34, 197, 94, 0.3)',
-    borderRadius: '8px',
-    padding: '16px',
-    color: '#22c55e',
-    fontSize: '14px',
-  },
-};
+

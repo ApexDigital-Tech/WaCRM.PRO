@@ -1,4 +1,5 @@
 import React from 'react';
+import './globals.css';
 
 export const metadata = {
   title: 'WA-CRM SaaS',
@@ -12,7 +13,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es">
-      <body style={{ margin: 0, fontFamily: 'system-ui, sans-serif' }}>
+      <body>
         {children}
       </body>
     </html>
